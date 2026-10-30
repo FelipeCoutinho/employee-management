@@ -142,3 +142,4 @@ Erro: `{ message }` em pt-BR. Validação: `400` e `errors: [{ field, message }]
 - Expediente que atravessa a meia-noite e intervalos.
 - Controle de edição concorrente: se duas abas gravarem o mesmo funcionário, vale a última.
 - Aviso ao trocar de funcionário com alterações não salvas.
+# employee-management
