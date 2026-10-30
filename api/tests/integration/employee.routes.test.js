@@ -19,12 +19,14 @@ describe('employee routes', () => {
   beforeAll(async () => {
     process.env.MONGOMS_VERSION = '7.0.14';
     mongo = await MongoMemoryServer.create();
+
+    const { connectDatabase } = await import('../../src/config/database.js');
+    ({ app } = await import('../../src/app.js'));
+
     process.env.MONGODB_URI = mongo.getUri();
     process.env.CORS_ORIGIN = 'http://localhost:8080';
     process.env.PORT = '3000';
 
-    const { connectDatabase } = await import('../../src/config/database.js');
-    ({ app } = await import('../../src/app.js'));
     await connectDatabase();
   }, 120000);
 

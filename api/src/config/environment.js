@@ -1,6 +1,12 @@
 import dotenv from 'dotenv';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-dotenv.config({ quiet: true });
+dotenv.config({
+  path: path.join(path.dirname(fileURLToPath(import.meta.url)), '../../.env'),
+  override: true,
+  quiet: true,
+});
 
 function readRequired(name) {
   const value = process.env[name];
@@ -13,7 +19,13 @@ function readRequired(name) {
 }
 
 export const environment = {
-  port: Number(process.env.PORT ?? 3000),
-  mongodbUri: readRequired('MONGODB_URI'),
-  corsOrigin: readRequired('CORS_ORIGIN'),
+  get port() {
+    return Number(process.env.PORT ?? 3000);
+  },
+  get mongodbUri() {
+    return readRequired('MONGODB_URI');
+  },
+  get corsOrigin() {
+    return readRequired('CORS_ORIGIN');
+  },
 };
