@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Funcionários</title>
+    <link rel="stylesheet" href="/vendor/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <main class="container py-4">
+      <header class="mb-4">
+        <h1 class="h3 mb-1">Funcionários</h1>
+        <p class="text-secondary mb-0">Cadastro, consulta e acompanhamento de expediente.</p>
+      </header>
+
+      <div id="alert-container"></div>
+
+      <div id="periodicity-error" class="alert alert-danger d-none" role="alert">
+        <p class="mb-2">Não foi possível carregar as periodicidades.</p>
+        <button type="button" class="btn btn-outline-danger btn-sm" id="retry-periodicities">
+          Tentar novamente
+        </button>
+      </div>
+
+      <div class="row g-4">
+        <section class="col-lg-5">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h2 class="h5" id="form-heading">Cadastrar funcionário</h2>
+              <form id="employee-form" autocomplete="off" novalidate>
+                <fieldset id="employee-fields" disabled>
+                  <div class="mb-3">
+                    <label class="form-label" for="name">Nome</label>
+                    <input class="form-control" id="name" name="name" type="text" maxlength="100" />
+                    <div class="invalid-feedback"></div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label" for="admissionDate">Data de admissão</label>
+                      <input class="form-control" id="admissionDate" name="admissionDate" type="date" />
+                      <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label" for="dismissalDate">Data de demissão</label>
+                      <input class="form-control" id="dismissalDate" name="dismissalDate" type="date" />
+                      <div class="invalid-feedback"></div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label" for="workStart">Hora de início</label>
+                      <input class="form-control" id="workStart" name="workStart" type="time" />
+                      <div class="invalid-feedback"></div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label" for="workEnd">Hora de fim</label>
+                      <input class="form-control" id="workEnd" name="workEnd" type="time" />
+                      <div class="invalid-feedback"></div>
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label" for="closingPeriodicity">Periodicidade</label>
+                    <select class="form-select" id="closingPeriodicity" name="closingPeriodicity"></select>
+                    <div class="invalid-feedback"></div>
+                  </div>
+
+                  <p id="worked-days" class="d-none mb-1">
+                    <strong>Dias trabalhados: </strong><span id="worked-days-value"></span>
+                  </p>
+                  <p id="daily-hours" class="d-none mb-3">
+                    <strong>Horas por dia: </strong><span id="daily-hours-value"></span>
+                  </p>
+
+                  <div class="d-flex flex-wrap gap-2">
+                    <button class="btn btn-primary" id="save-button" type="submit">Salvar</button>
+                    <button class="btn btn-outline-secondary d-none" id="cancel-edit" type="button">
+                      Cancelar edição
+                    </button>
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <section class="col-lg-7">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h2 class="h5">Funcionários cadastrados</h2>
+              <div class="table-responsive">
+                <table class="table align-middle mb-2">
+                  <thead>
+                    <tr>
+                      <th scope="col">Nome</th>
+                      <th scope="col">Admissão</th>
+                      <th scope="col">Demissão</th>
+                      <th scope="col">Periodicidade</th>
+                      <th scope="col">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="employee-table-body"></tbody>
+                </table>
+              </div>
+              <p id="empty-message" class="text-secondary d-none mb-0">Nenhum funcionário cadastrado.</p>
+              <div id="list-error" class="d-none">
+                <p id="list-error-message" class="text-danger mb-2"></p>
+                <button type="button" class="btn btn-outline-danger btn-sm" id="retry-list">
+                  Tentar novamente
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div
+      class="modal fade"
+      id="confirm-modal"
+      tabindex="-1"
+      aria-labelledby="confirm-modal-title"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title h5" id="confirm-modal-title"></h2>
+            <button type="button" class="btn-close" id="confirm-modal-close" aria-label="Fechar"></button>
+          </div>
+          <div class="modal-body" id="confirm-modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" id="confirm-modal-cancel">Cancelar</button>
+            <button type="button" class="btn btn-primary" id="confirm-modal-confirm">Confirmar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="details-modal"
+      tabindex="-1"
+      aria-labelledby="details-modal-title"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title h5" id="details-modal-title">Detalhes do funcionário</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+          </div>
+          <div class="modal-body" id="details-modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/vendor/jquery.min.js"></script>
+    <script src="/vendor/moment.min.js"></script>
+    <script src="/vendor/bootstrap.bundle.min.js"></script>
+    <script src="/config.js"></script>
+    <script type="module" src="/js/app.js"></script>
+  </body>
+</html>

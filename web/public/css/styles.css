@@ -1,0 +1,12 @@
+body {
+  background-color: #f4f6f8;
+}
+
+dd {
+  margin-bottom: 0.5rem;
+}
+
+.btn-close:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
