@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "todo-mcp": {
+      "command": "node",
+      "args": [
+        "/home/FELIPE.COUTINHO/.cursor/extensions/hurtis.todo-2.0.0-universal/bin/todo-mcp.js",
+        "--workspace",
+        "/home/FELIPE.COUTINHO/dev/employee-management"
+      ]
+    }
+  }
+}
