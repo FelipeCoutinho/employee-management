@@ -67,6 +67,18 @@ npm run dev -w web
 
 Acesse o frontend por `localhost`, e não por `127.0.0.1`. O CORS compara a origem exata, e `http://localhost:8080` é diferente de `http://127.0.0.1:8080`.
 
+## Seed
+
+O seed apaga os funcionários já gravados e insere cinco registros de exemplo. O MongoDB precisa estar no ar e o `api/.env` precisa existir. A API não precisa estar rodando.
+
+Na raiz:
+
+```bash
+npm run seed
+```
+
+O script da raiz executa `npm run seed -w api`, que roda `node seed.js`.
+
 ## Testes
 
 Na raiz:
